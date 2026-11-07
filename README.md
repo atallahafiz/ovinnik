@@ -12,9 +12,6 @@
 
 # Ovinnik
 
-*Named after the Slavic guardian spirit of the granary — the one that
-watches what you store and warns you when something is wrong.*
-
 Checkov tells you 80 things are wrong. Ovinnik tells you which 5 actually
 expose your data, why, and what the Terraform patch looks like — without
 sending your infra to the cloud.
