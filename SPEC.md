@@ -1,50 +1,22 @@
-# Ovinnik — Specification v0.1 (LOCKED)
-
-> Dokumen ini adalah kontrak. Setiap perubahan harus disengaja, bukan
-> hasil improvisasi AI.
+# Ovinnik — Specification v0.1 (Go, No AI)
 
 ## 1. Product
-CLI tool that triages Checkov findings on Terraform. Reads findings,
-correlates with infra context, explains risk, drafts patch, produces
-Markdown evidence. Runs locally. No cloud.
+Ovinnik is a high-performance CLI tool written in Go. It ingests Checkov 
+findings (JSON), correlates them with infrastructure context (YAML/CODEOWNERS), 
+and outputs prioritized, deterministic security reports. Zero AI. Zero Cloud.
 
-## 2. Position
-Scanner finds → AI decides & explains → Human approves → Scanner verifies.
+## 2. Tech Stack
+- Language: Go 1.22+
+- CLI Framework: github.com/spf13/cobra
+- Database: SQLite via modernc.org/sqlite (pure Go, no CGO)
+- Config Parsing: gopkg.in/yaml.v3
 
-## 3. Scope v0.1
-- Scanner: Checkov (Terraform), whitelist 10–15 check_id
-- DB: SQLite at `.ovinnik/ovinnik.db`
-- Priority: rule-based (exposure + data_class + rule class) → P0–P3
-- LLM: Qwen2.5-Coder via Ollama (7B dev, 32B user)
-- Output: narration + draft patch + Markdown evidence
-- CLI commands: init, scan, inventory, triage, explain, fix, verify, evidence
+## 3. Core Logic
+- Read Checkov JSON output.
+- Read `asset.yaml` (exposure, data_class) and `CODEOWNERS`.
+- Rule-based priority: match Checkov `check_id` against `rules.yaml`.
+- `ovinnik report` generates a standalone `report.md`.
 
-## 4. Not in scope
-Web UI, multi-scanner, Antares, multi-tenant, SSO, cloud LLM,
-auto-apply patches, post-incident forensics.
-
-## 5. Database schema
-See db.py. Tables: findings, assets, remediations, evidence, audit_log.
-`findings.raw` immutable.
-
-## 6. LLM output
-Two prompts: explain.md → {what, why_it_matters, attack_scenario,
-priority, priority_reason, citations[]}; fix.md → {diff, rationale,
-risk_of_change, test_to_run[], needs_human}. JSON strict, Pydantic v2.
-
-## 7. Guards
-- secret_scan.py before every LLM call
-- output_check.py after every patch draft: reject patch outside
-  target_file, reject patch that only adds tags/description
-- audit/logger.py wraps every LLM call
-
-## 8. Metrics
-Priority accuracy (P0 correctness) and patch applicability
-(terraform validate + apply + re-scan clean). Measured on 30 findings.
-Report honest numbers in README.
-
-## 9. Naming
-Package `ovinnik`, CLI `ovinnik`, dir `.ovinnik/`.
-
-## 10. License
-Apache-2.0 + DCO for contributors.
+## 4. Database Schema (SQLite)
+- `findings`: id, check_id, resource, file_path, raw_json, priority.
+- `assets`: resource_ref, owner_team, exposure, data_class.
