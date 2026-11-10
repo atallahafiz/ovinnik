@@ -1,0 +1,36 @@
+[
+  {
+    "check_type": "terraform",
+    "results": {
+      "passed_checks": [],
+      "failed_checks": [
+        {
+          "check_id": "CKV_AWS_18",
+          "check_name": "Ensure the S3 bucket has access logging enabled",
+          "file_path": "/main.tf",
+          "resource": "aws_s3_bucket.data_bucket"
+        },
+        {
+          "check_id": "CKV_AWS_19",
+          "check_name": "Ensure the S3 bucket has server-side-encryption enabled",
+          "file_path": "/main.tf",
+          "resource": "aws_s3_bucket.data_bucket"
+        }
+      ]
+    }
+  },
+  {
+    "check_type": "secrets",
+    "results": {
+      "passed_checks": [],
+      "failed_checks": [
+        {
+          "check_id": "CKV_SECRET_001",
+          "check_name": "Generic Secret Found",
+          "file_path": "/.env",
+          "resource": "generic_secret_env"
+        }
+      ]
+    }
+  }
+]
