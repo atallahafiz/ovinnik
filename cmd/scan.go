@@ -21,7 +21,6 @@ var scanCmd = &cobra.Command{
 			return fmt.Errorf("harap tentukan path file menggunakan flag --from-json <path>")
 		}
 
-		// Validasi keberadaan database
 		dbPath := filepath.Join(".ovinnik", "ovinnik.db")
 		if _, err := os.Stat(dbPath); os.IsNotExist(err) {
 			return fmt.Errorf("database tidak ditemukan. Harap jalankan 'ovinnik init' terlebih dahulu")
@@ -39,7 +38,6 @@ var scanCmd = &cobra.Command{
 			return fmt.Errorf("gagal membaca file JSON: %w", err)
 		}
 
-		// Definisi struktur JSON Checkov
 		type CheckovCheck struct {
 			CheckID  string `json:"check_id"`
 			FilePath string `json:"file_path"`
@@ -64,7 +62,6 @@ var scanCmd = &cobra.Command{
 			outputs = append(outputs, singleOutput)
 		}
 
-		// Eksekusi transaksi database
 		tx, err := conn.Begin()
 		if err != nil {
 			return fmt.Errorf("gagal memulai transaksi database: %w", err)

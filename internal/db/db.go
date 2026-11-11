@@ -8,7 +8,6 @@ import (
 	_ "modernc.org/sqlite" // Pure Go SQLite driver
 )
 
-// Connect membuka koneksi ke database SQLite di dalam direktori .ovinnik.
 func Connect() (*sql.DB, error) {
 	dbPath := filepath.Join(".ovinnik", "ovinnik.db")
 	conn, err := sql.Open("sqlite", dbPath)
@@ -16,7 +15,6 @@ func Connect() (*sql.DB, error) {
 		return nil, fmt.Errorf("gagal membuka koneksi database: %w", err)
 	}
 	
-	// Pastikan koneksi aktif
 	if err := conn.Ping(); err != nil {
 		return nil, fmt.Errorf("gagal melakukan ping ke database: %w", err)
 	}
@@ -24,7 +22,6 @@ func Connect() (*sql.DB, error) {
 	return conn, nil
 }
 
-// InitSchema membuat tabel findings jika belum ada.
 func InitSchema(conn *sql.DB) error {
 	query := `
 	CREATE TABLE IF NOT EXISTS findings (
