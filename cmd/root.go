@@ -7,7 +7,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "ovinnik",
 	Short: "Ovinnik is a high-performance CLI security tool.",
-	Long:  `Ovinnik adalah alat CLI keamanan berkinerja tinggi yang bersifat deterministik dan berbasis aturan (rule-based) untuk menganalisis temuan static analysis.`,
+	Long:  `Ovinnik is a high-performance, deterministic, and rule-based CLI security tool for analyzing static analysis findings.`,
 }
 
 func Execute() error {
